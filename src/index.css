@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body{
+    background-color: aquamarinergb(232,232,232);
+    /* background-color: blue; */
+}

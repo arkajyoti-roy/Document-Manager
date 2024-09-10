@@ -48,7 +48,12 @@ const Display = () => {
   useEffect(() => {
     fetchImages();
   }, []);
-
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUserDetails(JSON.parse(storedUser));
+    }
+  }, []);
   const fetchData = async () => {
     auth.onAuthStateChanged(async (user) => {
       if (user) {

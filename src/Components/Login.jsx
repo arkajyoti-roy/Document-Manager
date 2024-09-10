@@ -1,5 +1,6 @@
 // import React from 'react'
 // import { useEffect } from "react";
+import axios from 'axios';
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -12,6 +13,7 @@ import "./Dis.css";
 const Login = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
 
@@ -19,6 +21,14 @@ const Login = () => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      try {
+        const response = await axios.post('/api/login', { email, password });
+        setUser(response.data);
+        localStorage.setItem('user', JSON.stringify(response.data));
+      } catch (error) {
+        console.error('Login failed', error);
+      }
+
       console.log("Success");
       toast.success("Login Successful!", {
         position: "top-right",

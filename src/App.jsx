@@ -1,11 +1,11 @@
+import { useState, useEffect } from "react";
 import "./App.css";
 import { Route, Routes, BrowserRouter, Navigate } from "react-router-dom";
 import Registration from "./Components/Registration";
 import Login from "./Components/Login";
 import Display from "./Components/Display";
 import { auth } from "./Components/firebase";
-import { useState, useEffect } from "react";
-
+// import Loader from "./Components/Loader";
 
 function App() {
 
@@ -17,8 +17,11 @@ function App() {
   });
 
 
+  
+
   return (
      <>
+    
       <BrowserRouter>
         <Routes>
           {/* <Route path="/" element={} /> */}
@@ -28,6 +31,7 @@ function App() {
           <Route path="/display" element={<Display/>} />
         </Routes>
       </BrowserRouter>
+      
       {/* <Login/> */}
     </>
   );

@@ -3,7 +3,7 @@ import { auth, db } from "./firebase";
 import { getDoc, doc } from "firebase/firestore";
 import "./Dis.css";
 import { useNavigate } from "react-router-dom";
-
+import Loader from "./Loader";
 import { imageDb } from "./firebase";
 import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
 import { v4 } from "uuid";
@@ -84,6 +84,26 @@ const handelLogout = async ()=>{
   useEffect(() => {
     fetchData();
   }, []);
+
+
+  const [showFirstDiv, setShowFirstDiv] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowFirstDiv(false);
+    }, 2900); 
+
+    return () => clearTimeout(timer); 
+  }, []);
+
+
+  const containerStyle = {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100vh',
+    backgroundColor: 'black'
+  };
 
   return (
     <>
@@ -244,7 +264,12 @@ const handelLogout = async ()=>{
             )}
           </>
         ) : (
-          <p>Loading...</p>
+          // <p>Loading...</p>
+          // {showFirstDiv ? (
+            <div style={containerStyle}>
+            <Loader/>
+            </div>
+            // ) : (
         )}
       </div>
 

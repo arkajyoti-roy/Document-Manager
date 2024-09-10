@@ -81,7 +81,7 @@
     background: #0d45a5;
   }
   /* From Uiverse.io by cssbuttons-io */ 
-button {
+/* button {
     appearance: button;
     background-color: #1899D6;
     border: solid transparent;
@@ -143,15 +143,35 @@ button {
    
    button:active {
     padding-bottom: 10px;
-   }
-
+   } */
+.shad{
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
 .uplo{
    position: absolute;
   top: 50%;
   left: 50%;
   /* transform: translate(-50%, -50%); */
 }
-
+/* .uploo{
+  position: relative;
+  width: 80%;
+  height: 80%;
+  background: url('your-image.jpg') no-repeat center center;
+  background-size: cover;
+  filter: blur(8px);
+  -webkit-filter: blur(8px);
+} */
+.foxx{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.8); /* Optional: to make the content stand out */
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
 
 
 .impd{

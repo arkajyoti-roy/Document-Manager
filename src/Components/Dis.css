@@ -151,3 +151,13 @@ button {
   left: 50%;
   /* transform: translate(-50%, -50%); */
 }
+
+
+
+.impd{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 500px;
+  gap: 30px;
+}

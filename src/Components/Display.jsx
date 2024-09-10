@@ -109,8 +109,8 @@ const Display = () => {
       <br />
       <div>
         {imgUrl.map((dataVal, index) => (
-          <div key={index}>
-            <img src={dataVal} alt="" height="50px" />
+          <div  key={index}>
+            <img className="impd" src={dataVal} alt="" height="50px" />
           </div>
         ))}
       </div>

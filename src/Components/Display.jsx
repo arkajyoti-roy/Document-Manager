@@ -107,7 +107,8 @@ const handelLogout = async ()=>{
 
   return (
     <>
-      <div className="justify-center text-center">
+      <div>
+      {/* <div className="justify-center text-center"> */}
         {userDetails ? (
           <>
             {/* <div>
@@ -118,7 +119,9 @@ const handelLogout = async ()=>{
             </div> */}
 
             <header className="text-gray-600 body-font">
-              <div className="container mx-auto flex flex-wrap p-5 gap-80 flex-col md:flex-row items-center shad	">
+  <div className="container gap-56 mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+            
+              {/* <div className="container mx-auto flex flex-wrap p-5 gap-72 flex-col md:flex-row items-center shad	"> */}
                 <a className="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

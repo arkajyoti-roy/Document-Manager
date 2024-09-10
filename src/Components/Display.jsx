@@ -135,7 +135,7 @@ const handelLogout = async ()=>{
                   <span className="ml-3 text-xl">Document Manager</span>
                 </a>
                 <h1 className="font-semibold text-2xl text-black">
-                  Hello {userDetails.name}!
+                  Hello, {userDetails.name}!
                 </h1>
 
                 {/* {!isDivVisible && (

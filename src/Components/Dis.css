@@ -147,11 +147,32 @@
 .shad{
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
+.hq {
+  /* margin-top: 100px; */
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 30px;
+  font-weight: 600;
+}
+.h {
+  /* margin-top: 100px; */
+  /* margin-bottom: 10px; */
+  text-align: center;
+  font-size: 30px;
+  font-weight: 600;
+}
 .uplo{
    position: absolute;
   top: 50%;
   left: 50%;
   /* transform: translate(-50%, -50%); */
+}
+.logcen{
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center horizontally */
+  align-items: center;     /* Center vertically */
+  height: 100vh;  
 }
 /* .uploo{
   position: relative;

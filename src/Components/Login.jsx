@@ -44,16 +44,20 @@ const Login = () => {
   };
 
   return (
-    <div className="w-80 rounded-lg shadow h-auto p-6 bg-white relative overflow-hidden uplo">
-      <div className="flex flex-col justify-center items-center space-y-2">
-        <h2 className="text-2xl font-medium text-slate-700">Login</h2>
+  <>
+      {/* <h1>By Arka</h1> */}
+    <div className='logcen'>
+      <h1 className='hq'><>Document Manager</></h1>
+    <div className="w-80 rounded-lg shadow h-auto p-6 bg-white relative overflow-hidden ">
+      <div className="flex flex-col justify-center items-start space-y-2">
+        <h2 className="text-2xl font-bold text-gray-900">Login</h2>
         <p className="text-slate-500">Enter details below.</p>
       </div>
       <form onSubmit={request} className="w-full mt-4 space-y-3">
         <div>
           <input
             className="outline-none border-2 rounded-md px-2 py-1 text-slate-500 w-full focus:border-blue-300"
-            placeholder="Username"
+            placeholder="Email"
             id="username"
             name="username"
             type="text"
@@ -82,7 +86,7 @@ const Login = () => {
             />
             <span className="text-slate-500">Remember me </span>
           </div>
-          <a className="text-blue-500 font-medium hover:underline" href="#">
+          <a className="text-white font-medium hover:underline" href="#">
             Forgot Password
           </a>
         </div>
@@ -102,6 +106,8 @@ const Login = () => {
         </p>
       </form>
     </div>
+    </div>
+    </>
   );
 };
 

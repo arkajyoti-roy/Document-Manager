@@ -40,7 +40,10 @@ const Registration = () => {
   };
 
   return (
+    <>
+
     <div className="flex flex-col items-center justify-center h-screen">
+    <h1 className='h'><>Document Manager</></h1>
       <div className="w-full max-w-md bg-white rounded-lg shadow-md p-6">
         <h2 className="text-2xl font-bold text-gray-900 mb-4">
           Create your account
@@ -88,6 +91,7 @@ const Registration = () => {
         </form>
       </div>
     </div>
+    </>
   );
 };
 

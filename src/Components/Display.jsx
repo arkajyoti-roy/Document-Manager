@@ -6,7 +6,14 @@ import "./Dis.css";
 import { useNavigate } from "react-router-dom";
 import Loader from "./Loader";
 import { imageDb } from "./firebase";
-import { getDownloadURL, listAll, ref, uploadBytes, deleteObject } from "firebase/storage";
+import { saveAs } from "file-saver"; 
+import {
+  getDownloadURL,
+  listAll,
+  ref,
+  uploadBytes,
+  deleteObject,
+} from "firebase/storage";
 import { v4 } from "uuid";
 import { toast } from "react-toastify";
 
@@ -50,7 +57,7 @@ const Display = () => {
     fetchImages();
   }, []);
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
+    const storedUser = localStorage.getItem("user");
     if (storedUser) {
       setUserDetails(JSON.parse(storedUser));
     }
@@ -84,7 +91,7 @@ const Display = () => {
       await deleteObject(imgRef);
 
       // Update the state to remove the deleted image URL
-      setImgUrl(imgUrl.filter(url => url !== imageUrl));
+      setImgUrl(imgUrl.filter((url) => url !== imageUrl));
       alert("File deleted successfully");
     } catch (error) {
       console.error("Error deleting file:", error);
@@ -92,37 +99,41 @@ const Display = () => {
     }
   };
 
-const handelLogout = async ()=>{
-  try {
-    await auth.signOut();
-    toast.success("Logout Successfully!", {
-      position: 'top-right'
-    });
-    navigate("/login");
-  } catch (error) {
-    console.error(error.message);
-  }
-}
+  const handelLogout = async () => {
+    try {
+      await auth.signOut();
+      toast.success("Logout Successfully!", {
+        position: "top-right",
+      });
+      navigate("/login");
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  const downloadImage = (url) => {
+    saveAs(url, "downloaded_image.jpg"); // Use the saveAs function to download the image
+  }
 
   const [showFirstDiv, setShowFirstDiv] = useState(true);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowFirstDiv(false);
-    }, 2900); 
+    }, 2900);
 
-    return () => clearTimeout(timer); 
+    return () => clearTimeout(timer);
   }, []);
   const containerStyle = {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100vh',
-    backgroundColor: 'black'
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100vh",
+    backgroundColor: "black",
   };
 
   return (
@@ -130,8 +141,8 @@ const handelLogout = async ()=>{
       <div>
         {userDetails ? (
           <>
-                    <header className="text-gray-600 body-font">
-  <div className="container gap-56 mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+            <header className="text-gray-600 body-font">
+              <div className="container w-full shad gap-56 mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
                 <a className="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -212,7 +223,10 @@ const handelLogout = async ()=>{
                   </div>
                   <div>
                     {/* )} */}
-                    <button onClick={handelLogout} className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
+                    <button
+                      onClick={handelLogout}
+                      className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0"
+                    >
                       Log Out
                       <svg
                         fill="#000000"
@@ -264,23 +278,61 @@ const handelLogout = async ()=>{
             )}
           </>
         ) : (
-            <div style={containerStyle}>
-            <Loader/>
-            </div>
+          <div style={containerStyle}>
+            <Loader />
+          </div>
         )}
       </div>
       <br />
       <br />
-        {/* <img className="impd" src={dataVal} alt="" height="50px" /> */}
+      {/* <img className="impd" src={dataVal} alt="" height="50px" /> */}
       <br />
       <div>
-      {imgUrl.map((url, index) => (
-            <div key={index}>
-              <img className="impd" src={url} alt={`Image ${index}`}  />
-              <button onClick={() => handleDelete(url)}>Delete</button>
-            </div>
-          ))}
+        {imgUrl.map((url, index) => (
+          <div key={index}>
+            <img className="impd" src={url} alt={`Image ${index}`} />
+            <div>
+              <button onClick={() => downloadImage(url)} className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  fill="none"
+                  className="w-5 h-5 mr-2 -ml-1"
+                >
+                  <path
+                    d="M12 4v12m8-8l-8 8-8-8"
+                    strokeWidth="2"
+                    strokeLinejoin="round"
+                    strokeLinecap="round"
+                  ></path>
+                </svg>
+                Download
+              </button>
 
+              <button
+                onClick={() => handleDelete(url)}
+                className="inline-flex items-center px-6 py-3 bg-red-600 transition ease-in-out delay-75 hover:bg-red-700 text-white text-base font-medium rounded-md shadow-sm hover:-translate-y-1 hover:scale-110"
+              >
+                <svg
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  className="w-5 h-5 mr-2"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    strokeWidth="2"
+                    strokeLinejoin="round"
+                    strokeLinecap="round"
+                  ></path>
+                </svg>
+                Delete
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
     </>
   );

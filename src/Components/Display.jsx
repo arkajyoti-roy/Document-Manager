@@ -116,8 +116,8 @@ const Display = () => {
   }, []);
 
   const downloadImage = (url) => {
-    saveAs(url, "downloaded_image.jpg"); // Use the saveAs function to download the image
-  }
+    saveAs(url, 'downloaded_image');
+  };
 
   const [showFirstDiv, setShowFirstDiv] = useState(true);
 

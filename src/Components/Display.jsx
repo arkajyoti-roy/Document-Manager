@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { auth, db } from "./firebase";
 import { getDoc, doc } from "firebase/firestore";
 import "./Dis.css";
+// import { storage } from './firebaseConfig';
 import { useNavigate } from "react-router-dom";
 import Loader from "./Loader";
 import { imageDb } from "./firebase";
-import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, listAll, ref, uploadBytes, deleteObject } from "firebase/storage";
 import { v4 } from "uuid";
 import { toast } from "react-toastify";
 
@@ -68,6 +69,29 @@ const Display = () => {
     });
   };
 
+  const handleDelete = async (imageUrl) => {
+    if (!imageUrl) {
+      console.error("Invalid URL:", imageUrl);
+      alert("Invalid URL. Please try again.");
+      return;
+    }
+
+    try {
+      // Find the reference of the image to delete
+      const imgRef = ref(imageDb, imageUrl);
+
+      // Delete the image from Firebase Storage
+      await deleteObject(imgRef);
+
+      // Update the state to remove the deleted image URL
+      setImgUrl(imgUrl.filter(url => url !== imageUrl));
+      alert("File deleted successfully");
+    } catch (error) {
+      console.error("Error deleting file:", error);
+      alert("Error deleting file: " + error.message);
+    }
+  };
+
 const handelLogout = async ()=>{
   try {
     await auth.signOut();
@@ -80,11 +104,9 @@ const handelLogout = async ()=>{
   }
 }
 
-
   useEffect(() => {
     fetchData();
   }, []);
-
 
   const [showFirstDiv, setShowFirstDiv] = useState(true);
 
@@ -95,8 +117,6 @@ const handelLogout = async ()=>{
 
     return () => clearTimeout(timer); 
   }, []);
-
-
   const containerStyle = {
     display: 'flex',
     justifyContent: 'center',
@@ -108,20 +128,10 @@ const handelLogout = async ()=>{
   return (
     <>
       <div>
-      {/* <div className="justify-center text-center"> */}
         {userDetails ? (
           <>
-            {/* <div>
-              <h1>Welcome {userDetails.name}</h1>
-              <h2>Email: {userDetails.email}</h2>
-              <h2>Phone: {userDetails.phone}</h2>
-              <button className="bg-emerald-900">LOG OUT</button>
-            </div> */}
-
-            <header className="text-gray-600 body-font">
+                    <header className="text-gray-600 body-font">
   <div className="container gap-56 mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-            
-              {/* <div className="container mx-auto flex flex-wrap p-5 gap-72 flex-col md:flex-row items-center shad	"> */}
                 <a className="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -140,9 +150,6 @@ const handelLogout = async ()=>{
                 <h1 className="font-semibold text-2xl text-black">
                   Hello, {userDetails.name}!
                 </h1>
-
-                {/* {!isDivVisible && (
-        <button onClick={handleShowClick}>Show Div</button> */}
                 <div className="flex flex-row gap-44">
                   <div>
                     <button onClick={handleShowClick}>
@@ -158,7 +165,6 @@ const handelLogout = async ()=>{
                         strokeWidth="0.01024"
                       >
                         <g id="SVGRepo_bgCarrier" strokeWidth="0" />
-
                         <g
                           id="SVGRepo_tracerCarrier"
                           strokeLinecap="round"
@@ -170,39 +176,32 @@ const handelLogout = async ()=>{
                             d="M819.5 783.7h-51.3c-16.6 0-30 13.4-30 30s13.4 30 30 30h51.3c16.6 0 30-13.4 30-30s-13.5-30-30-30zM665.7 783.7H143.9c-16.6 0-30 13.4-30 30s13.4 30 30 30h521.8c16.6 0 30-13.4 30-30s-13.5-30-30-30z"
                             fill="#657671"
                           />
-
                           <path
                             d="M834.7 940.7H230.1c-23.9 0-43.5-19.6-43.5-43.5s19.6-43.5 43.5-43.5h604.6c23.9 0 43.5 19.6 43.5 43.5s-19.5 43.5-43.5 43.5z"
                             fill="#9a7f74"
                           />
-
                           <path
                             d="M791.8 409.6H665.7c-16.6 0-30 13.4-30 30s13.4 30 30 30h126.2c41 0 74.4 33.4 74.4 74.4v281.3c0 41-33.4 74.4-74.4 74.4H232.4c-41 0-74.4-33.4-74.4-74.4V544c0-41 33.4-74.4 74.4-74.4h139.3c16.6 0 30-13.4 30-30s-13.4-30-30-30H232.4C158.3 409.6 98 469.9 98 544v281.3c0 74.1 60.3 134.4 134.4 134.4h559.4c74.1 0 134.4-60.3 134.4-134.4V544c0-74.1-60.3-134.4-134.4-134.4z"
                             fill="#000000"
                           />
-
                           <path
                             d="M362.3 272.1l118.8-118.8v550.9c0 16.6 13.4 30 30 30s30-13.4 30-30V153.3l118.8 118.8c5.9 5.9 13.5 8.8 21.2 8.8s15.4-2.9 21.2-8.8c11.7-11.7 11.7-30.7 0-42.4L552.6 80c-11.1-11.1-25.9-17.2-41.5-17.2-15.7 0-30.4 6.1-41.5 17.2L319.9 229.7c-11.7 11.7-11.7 30.7 0 42.4s30.7 11.7 42.4 0z"
                             fill="#000000"
                           />
                         </g>
-
                         <g id="SVGRepo_iconCarrier">
                           <path
                             d="M819.5 783.7h-51.3c-16.6 0-30 13.4-30 30s13.4 30 30 30h51.3c16.6 0 30-13.4 30-30s-13.5-30-30-30zM665.7 783.7H143.9c-16.6 0-30 13.4-30 30s13.4 30 30 30h521.8c16.6 0 30-13.4 30-30s-13.5-30-30-30z"
                             fill="#657671"
                           />
-
                           <path
                             d="M834.7 940.7H230.1c-23.9 0-43.5-19.6-43.5-43.5s19.6-43.5 43.5-43.5h604.6c23.9 0 43.5 19.6 43.5 43.5s-19.5 43.5-43.5 43.5z"
                             fill="#9a7f74"
                           />
-
                           <path
                             d="M791.8 409.6H665.7c-16.6 0-30 13.4-30 30s13.4 30 30 30h126.2c41 0 74.4 33.4 74.4 74.4v281.3c0 41-33.4 74.4-74.4 74.4H232.4c-41 0-74.4-33.4-74.4-74.4V544c0-41 33.4-74.4 74.4-74.4h139.3c16.6 0 30-13.4 30-30s-13.4-30-30-30H232.4C158.3 409.6 98 469.9 98 544v281.3c0 74.1 60.3 134.4 134.4 134.4h559.4c74.1 0 134.4-60.3 134.4-134.4V544c0-74.1-60.3-134.4-134.4-134.4z"
                             fill="#000000"
                           />
-
                           <path
                             d="M362.3 272.1l118.8-118.8v550.9c0 16.6 13.4 30 30 30s30-13.4 30-30V153.3l118.8 118.8c5.9 5.9 13.5 8.8 21.2 8.8s15.4-2.9 21.2-8.8c11.7-11.7 11.7-30.7 0-42.4L552.6 80c-11.1-11.1-25.9-17.2-41.5-17.2-15.7 0-30.4 6.1-41.5 17.2L319.9 229.7c-11.7 11.7-11.7 30.7 0 42.4s30.7 11.7 42.4 0z"
                             fill="#000000"
@@ -228,11 +227,9 @@ const handelLogout = async ()=>{
                 </div>
               </div>
             </header>
-
             <br />
             <br />
             <br />
-
             {isDivVisible && (
               <div>
                 <div className="uploo">
@@ -267,27 +264,25 @@ const handelLogout = async ()=>{
             )}
           </>
         ) : (
-          // <p>Loading...</p>
-          // {showFirstDiv ? (
             <div style={containerStyle}>
             <Loader/>
             </div>
-            // ) : (
         )}
       </div>
-
       <br />
       <br />
+        {/* <img className="impd" src={dataVal} alt="" height="50px" /> */}
       <br />
       <div>
-        {imgUrl.map((dataVal, index) => (
-          <div key={index}>
-            <img className="impd" src={dataVal} alt="" height="50px" />
-          </div>
-        ))}
+      {imgUrl.map((url, index) => (
+            <div key={index}>
+              <img className="impd" src={url} alt={`Image ${index}`}  />
+              <button onClick={() => handleDelete(url)}>Delete</button>
+            </div>
+          ))}
+
       </div>
     </>
   );
 };
-
 export default Display;

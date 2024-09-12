@@ -313,13 +313,14 @@ const Display = () => {
       <br />
       {/* <img className="impd" src={dataVal} alt="" height="50px" /> */}
       <br />
-      <div className="flex nam  gap-3">
+      {/* <div className="flex nam  gap-3"> */}
+      <div className="nam">
         {imgUrl.map((url, index) => (
-          <div key={index}>
+          <div className="nam2" key={index}>
             
             <img className="impd" src={url} alt={`Image ${index}`} />
    
-            <div>
+            <div className="flex gap-5 pt-4 justify-between">
               <button
                 onClick={() => downloadImage(url)}
                 className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out"

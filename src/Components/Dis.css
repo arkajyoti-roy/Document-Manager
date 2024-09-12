@@ -199,10 +199,26 @@
   /* display: flex; */
   /* flex-direction: row; */
   /* justify-content: space-around; */
+  border: 1px;
+  border-radius: 6px;
   height: 150px;
   width: 8000px;
   gap: 30px;
 }
 .nam{
+  display: flex;
   align-content: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 25px;
+  
+}
+.nam2{
+  flex: 1 1 25%; /* Each item takes up 25% of the container's width */
+  box-sizing: border-box;
+  padding: 10px;
+ 
+}
+.nam2:nth-child(n+n) {
+  flex-basis: 100%; /* Forces items after the 4th to start on a new row */
 }

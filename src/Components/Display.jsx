@@ -6,7 +6,7 @@ import "./Dis.css";
 import { useNavigate } from "react-router-dom";
 import Loader from "./Loader";
 import { imageDb } from "./firebase";
-import { saveAs } from "file-saver"; 
+import { saveAs } from "file-saver";
 import {
   getDownloadURL,
   listAll,
@@ -33,9 +33,13 @@ const Display = () => {
   };
 
   const handleClick = () => {
+    handleHideClick();
     const imgRef = ref(imageDb, `iimps/${v4()}`);
     uploadBytes(imgRef, img).then(() => {
       fetchImages(); // Fetch images after upload
+      toast.success("Uploaded Successfully!", {
+        position: "top-right",
+      });
     });
   };
 
@@ -116,7 +120,7 @@ const Display = () => {
   }, []);
 
   const downloadImage = (url) => {
-    saveAs(url, 'downloaded_image');
+    saveAs(url, "downloaded_image");
   };
 
   const [showFirstDiv, setShowFirstDiv] = useState(true);
@@ -270,7 +274,29 @@ const Display = () => {
                         id="file-input"
                       />
                     </label>{" "}
-                    <button onClick={handleClick}>Submit</button> <br />
+                    <div className="flex items-center justify-center pt-5 ">
+                      <button
+                        onClick={handleClick}
+                        className="flex items-center bg-blue-500 text-white gap-1 px-4 py-2 cursor-pointer text-gray-800 font-semibold tracking-widest rounded-md hover:bg-blue-400 duration-300 hover:gap-2 hover:translate-x-3"
+                      >
+                        Upload
+                        <svg
+                          className="w-5 h-5"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"
+                            strokeLinejoin="round"
+                            strokeLinecap="round"
+                          ></path>
+                        </svg>
+                      </button>
+                    </div>
+                    {/* <button onClick={handleClick}>Submit</button> <br /> */}
                   </div>
                   <br />
                 </div>
@@ -287,12 +313,17 @@ const Display = () => {
       <br />
       {/* <img className="impd" src={dataVal} alt="" height="50px" /> */}
       <br />
-      <div>
+      <div className="flex flex-row gap-3">
         {imgUrl.map((url, index) => (
           <div key={index}>
+            
             <img className="impd" src={url} alt={`Image ${index}`} />
+   
             <div>
-              <button onClick={() => downloadImage(url)} className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
+              <button
+                onClick={() => downloadImage(url)}
+                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"

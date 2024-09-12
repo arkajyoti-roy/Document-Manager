@@ -196,10 +196,13 @@
 
 
 .impd{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
+  /* display: flex; */
+  /* flex-direction: row; */
+  /* justify-content: space-around; */
   height: 150px;
   width: 8000px;
   gap: 30px;
+}
+.nam{
+  align-content: flex-start;
 }

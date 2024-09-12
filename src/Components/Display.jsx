@@ -313,7 +313,7 @@ const Display = () => {
       <br />
       {/* <img className="impd" src={dataVal} alt="" height="50px" /> */}
       <br />
-      <div className="flex flex-row gap-3">
+      <div className="flex nam  gap-3">
         {imgUrl.map((url, index) => (
           <div key={index}>
             

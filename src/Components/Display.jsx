@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import { auth, db } from "./firebase";
 import { getDoc, doc } from "firebase/firestore";
@@ -7,6 +9,9 @@ import { useNavigate } from "react-router-dom";
 import Loader from "./Loader";
 import { imageDb } from "./firebase";
 import { saveAs } from "file-saver";
+import html2canvas from "html2canvas";
+
+
 import {
   getDownloadURL,
   listAll,
@@ -21,8 +26,44 @@ const Display = () => {
   const [userDetails, setUserDetails] = useState(null);
   const [img, setImg] = useState("");
   const [imgUrl, setImgUrl] = useState([]);
+  const [imageName, setImageName] = useState("");
   const navigate = useNavigate();
   const [isDivVisible, setIsDivVisible] = useState(false);
+  const [showFirstDiv, setShowFirstDiv] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowFirstDiv(false);
+    }, 2900);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUserDetails(JSON.parse(storedUser));
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        const docRef = doc(db, "Users", user.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setUserDetails(docSnap.data());
+          fetchImages(user.uid); // Fetch images after user data is set
+        } else {
+          console.log("User is logged out");
+        }
+      }
+    });
+  };
 
   const handleShowClick = () => {
     setIsDivVisible(true);
@@ -34,17 +75,18 @@ const Display = () => {
 
   const handleClick = () => {
     handleHideClick();
-    const imgRef = ref(imageDb, `iimps/${v4()}`);
+    const imgRef = ref(imageDb, `iimps/${auth.currentUser.uid}/${v4()}`);
     uploadBytes(imgRef, img).then(() => {
-      fetchImages(); // Fetch images after upload
+      fetchImages(auth.currentUser.uid); // Fetch images after upload
       toast.success("Uploaded Successfully!", {
         position: "top-right",
       });
     });
   };
 
-  const fetchImages = () => {
-    listAll(ref(imageDb, "iimps")).then((imgs) => {
+  const fetchImages = (uid) => {
+    const listRef = ref(imageDb, `iimps/${uid}`);
+    listAll(listRef).then((imgs) => {
       const urls = [];
       imgs.items.forEach((val) => {
         getDownloadURL(val).then((url) => {
@@ -54,29 +96,6 @@ const Display = () => {
           }
         });
       });
-    });
-  };
-
-  useEffect(() => {
-    fetchImages();
-  }, []);
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUserDetails(JSON.parse(storedUser));
-    }
-  }, []);
-  const fetchData = async () => {
-    auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        const docRef = doc(db, "Users", user.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          setUserDetails(docSnap.data());
-        } else {
-          console.log("User is logged out");
-        }
-      }
     });
   };
 
@@ -115,23 +134,10 @@ const Display = () => {
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const downloadImage = (url) => {
-    saveAs(url, "downloaded_image");
-  };
-
-  const [showFirstDiv, setShowFirstDiv] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowFirstDiv(false);
-    }, 2900);
-
-    return () => clearTimeout(timer);
-  }, []);
+  // const downloadImage = () => {
+    
+  //     };
+  // };
   const containerStyle = {
     display: "flex",
     justifyContent: "center",
@@ -269,11 +275,17 @@ const Display = () => {
                         onChange={(e) => {
                           setImg(e.target.files[0]);
                         }}
-                        accept="image/*"
+                       accept="image/*"
                         required
                         id="file-input"
                       />
                     </label>{" "}
+                    <input
+                      type="text"
+                      placeholder="Enter image name"
+                      value={imageName}
+                      onChange={(e) => setImageName(e.target.value)}
+                    />
                     <div className="flex items-center justify-center pt-5 ">
                       <button
                         onClick={handleClick}
@@ -315,32 +327,40 @@ const Display = () => {
       <br />
       {/* <div className="flex nam  gap-3"> */}
       <div className="nam">
-        {imgUrl.map((url, index) => (
-          <div className="nam2" key={index}>
-            
-            <img className="impd" src={url} alt={`Image ${index}`} />
-   
+        {imgUrl.map((url) => (
+          <div className="nam2" key={url}>
+            <img className="impd"  src={url} alt="Uploaded" />
+
+            {/* {imgUrl.map((url, index) => ( */}
+            {/* <div className="nam2" key={index}> */}
+
+            {/* <img className="impd" src={url} alt={`Image ${index}`} /> */}
+
             <div className="flex gap-5 pt-4 justify-between">
+              {/* <a href="iimps/{url}.png" download> */}
+
               <button
-                onClick={() => downloadImage(url)}
+                // onClick={() => downloadImage(url)}
+                
                 className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out"
-              >
+                >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                   fill="none"
                   className="w-5 h-5 mr-2 -ml-1"
-                >
+                  >
                   <path
                     d="M12 4v12m8-8l-8 8-8-8"
                     strokeWidth="2"
                     strokeLinejoin="round"
                     strokeLinecap="round"
-                  ></path>
+                    ></path>
                 </svg>
                 Download
               </button>
+                    {/* </a> */}
 
               <button
                 onClick={() => handleDelete(url)}

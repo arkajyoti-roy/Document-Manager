@@ -188,7 +188,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: rgba(255, 255, 255, 0.8); /* Optional: to make the content stand out */
+  background-color: rgb(255 255 255); /* Optional: to make the content stand out */
   padding: 20px;
   border-radius: 10px;
   text-align: center;
@@ -219,6 +219,70 @@
   padding: 10px;
  
 }
+.loader2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
 .nam2:nth-child(n+n) {
   flex-basis: 100%; /* Forces items after the 4th to start on a new row */
+}
+@media (min-width: 300px) and (max-width: 768px){
+  .shad{
+    margin-top: 12px;
+    display: flex !important;
+    flex-direction: row !important;
+    gap:20px !important;
+    
+    justify-content: space-around;
+    position: fixed;
+    z-index: 50 !important;
+    background-color: #fff !important;
+    /* padding-bottom: 20px !important; */
+    /* flex-direction: row !important; */
+  }
+  .up{
+    margin-top: 3px !important;
+  }
+  .lft{
+    position: absolute !important;
+    left: 7px !important;
+  }
+  .dc{
+    display: none;
+  }
+  .nc{
+    margin-left: -32%;
+    margin-top: -19px;
+    font-size: 20px !important;
+  }
+  .bt{
+    display: flex;
+    margin-top: -20px;
+    position: absolute;
+    right: 0;
+    /* text-align: right; */
+    gap: 14px !important;
+    /* float: right !important; */
+    justify-items: flex-end;
+  }
+  .foxx{
+    /* margin-top: 25px !important; */
+    /* margin-top: 25px; */
+    z-index: 100 !important;
+
+  }
+  .lo{
+    
+    margin-top: -13px;
+  }
+  .nam {
+    margin-top: 30px;
+}
+.sv{
+  display: none;
+}
+
 }

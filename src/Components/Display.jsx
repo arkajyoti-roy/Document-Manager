@@ -11,7 +11,6 @@ import { imageDb } from "./firebase";
 import { saveAs } from "file-saver";
 import html2canvas from "html2canvas";
 
-
 import {
   getDownloadURL,
   listAll,
@@ -21,6 +20,7 @@ import {
 } from "firebase/storage";
 import { v4 } from "uuid";
 import { toast } from "react-toastify";
+import ImgLoader from "./ImgLoader";
 
 const Display = () => {
   const [userDetails, setUserDetails] = useState(null);
@@ -30,6 +30,8 @@ const Display = () => {
   const navigate = useNavigate();
   const [isDivVisible, setIsDivVisible] = useState(false);
   const [showFirstDiv, setShowFirstDiv] = useState(true);
+  const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -85,6 +87,7 @@ const Display = () => {
   };
 
   const fetchImages = (uid) => {
+    setLoading(true); // Set loading to true before fetching images
     const listRef = ref(imageDb, `iimps/${uid}`);
     listAll(listRef).then((imgs) => {
       const urls = [];
@@ -93,11 +96,13 @@ const Display = () => {
           urls.push(url);
           if (urls.length === imgs.items.length) {
             setImgUrl(urls);
+            setLoading(false); // Set loading to false after images are loaded
           }
         });
       });
     });
   };
+
 
   const handleDelete = async (imageUrl) => {
     if (!imageUrl) {
@@ -135,7 +140,7 @@ const Display = () => {
   };
 
   // const downloadImage = () => {
-    
+
   //     };
   // };
   const containerStyle = {
@@ -153,7 +158,7 @@ const Display = () => {
           <>
             <header className="text-gray-600 body-font">
               <div className="container w-full shad gap-56 mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-                <a className="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
+                <a className="flex title-font font-medium lft items-center text-gray-900 mb-4 md:mb-0">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -166,13 +171,13 @@ const Display = () => {
                   >
                     <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
                   </svg>
-                  <span className="ml-3 text-xl">Document Manager</span>
+                  <span className="ml-3 dc text-xl">Document Manager</span>
                 </a>
-                <h1 className="font-semibold text-2xl text-black">
+                <h1 className="font-semibold nc text-2xl text-black">
                   Hello, {userDetails.name}!
                 </h1>
-                <div className="flex flex-row gap-44">
-                  <div>
+                <div className="flex bt flex-row gap-44">
+                  <div className="up">
                     <button onClick={handleShowClick}>
                       <svg
                         height="2.5em"
@@ -231,13 +236,13 @@ const Display = () => {
                       </svg>
                     </button>
                   </div>
-                  <div>
+                  <div className="lo"> 
                     {/* )} */}
                     <button
                       onClick={handelLogout}
-                      className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0"
+                      className="inline-flex items-center border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0"
                     >
-                      Log Out
+                    <span  className="sv">Log Out</span>  
                       <svg
                         fill="#000000"
                         height="2.2em"
@@ -252,8 +257,70 @@ const Display = () => {
               </div>
             </header>
             <br />
+
             <br />
-            <br />
+            <br /> {loading ? (
+        <div className="loader2">
+          
+          <ImgLoader/>
+        </div> 
+      ) : (
+            <div className="nam">
+              {imgUrl.map((url) => (
+                <div className="nam2" key={url}>
+                  <img className="impd" src={url} alt="Uploaded" />
+
+                  <div className="flex gap-5 pt-4 justify-between">
+                    {/* <a href="iimps/{url}.png" download> */}
+
+                    <button
+                      // onClick={() => downloadImage(url)}
+
+                      className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        fill="none"
+                        className="w-5 h-5 mr-2 -ml-1"
+                      >
+                        <path
+                          d="M12 4v12m8-8l-8 8-8-8"
+                          strokeWidth="2"
+                          strokeLinejoin="round"
+                          strokeLinecap="round"
+                        ></path>
+                      </svg>
+                      Download
+                    </button>
+                    {/* </a> */}
+
+                    <button
+                      onClick={() => handleDelete(url)}
+                      className="inline-flex items-center px-6 py-3 bg-red-600 transition ease-in-out delay-75 hover:bg-red-700 text-white text-base font-medium rounded-md shadow-sm hover:-translate-y-1 hover:scale-110"
+                    >
+                      <svg
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        className="w-5 h-5 mr-2"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                          strokeWidth="2"
+                          strokeLinejoin="round"
+                          strokeLinecap="round"
+                        ></path>
+                      </svg>
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+                 )}
             {isDivVisible && (
               <div>
                 <div className="uploo">
@@ -275,7 +342,7 @@ const Display = () => {
                         onChange={(e) => {
                           setImg(e.target.files[0]);
                         }}
-                       accept="image/*"
+                        accept="image/*"
                         required
                         id="file-input"
                       />
@@ -320,71 +387,6 @@ const Display = () => {
             <Loader />
           </div>
         )}
-      </div>
-      <br />
-      <br />
-      {/* <img className="impd" src={dataVal} alt="" height="50px" /> */}
-      <br />
-      {/* <div className="flex nam  gap-3"> */}
-      <div className="nam">
-        {imgUrl.map((url) => (
-          <div className="nam2" key={url}>
-            <img className="impd"  src={url} alt="Uploaded" />
-
-            {/* {imgUrl.map((url, index) => ( */}
-            {/* <div className="nam2" key={index}> */}
-
-            {/* <img className="impd" src={url} alt={`Image ${index}`} /> */}
-
-            <div className="flex gap-5 pt-4 justify-between">
-              {/* <a href="iimps/{url}.png" download> */}
-
-              <button
-                // onClick={() => downloadImage(url)}
-                
-                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out"
-                >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  fill="none"
-                  className="w-5 h-5 mr-2 -ml-1"
-                  >
-                  <path
-                    d="M12 4v12m8-8l-8 8-8-8"
-                    strokeWidth="2"
-                    strokeLinejoin="round"
-                    strokeLinecap="round"
-                    ></path>
-                </svg>
-                Download
-              </button>
-                    {/* </a> */}
-
-              <button
-                onClick={() => handleDelete(url)}
-                className="inline-flex items-center px-6 py-3 bg-red-600 transition ease-in-out delay-75 hover:bg-red-700 text-white text-base font-medium rounded-md shadow-sm hover:-translate-y-1 hover:scale-110"
-              >
-                <svg
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  className="w-5 h-5 mr-2"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                    strokeWidth="2"
-                    strokeLinejoin="round"
-                    strokeLinecap="round"
-                  ></path>
-                </svg>
-                Delete
-              </button>
-            </div>
-          </div>
-        ))}
       </div>
     </>
   );

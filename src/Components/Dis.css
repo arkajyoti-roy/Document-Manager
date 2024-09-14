@@ -80,71 +80,10 @@
   #file-input::file-selector-button:hover {
     background: #0d45a5;
   }
-  /* From Uiverse.io by cssbuttons-io */ 
-/* button {
-    appearance: button;
-    background-color: #1899D6;
-    border: solid transparent;
-    border-radius: 16px;
-    border-width: 0 0 4px;
-    box-sizing: border-box;
-    color: #FFFFFF;
-    cursor: pointer;
-    display: inline-block;
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: .8px;
-    line-height: 20px;
-    margin: 0;
-    outline: none;
-    overflow: visible;
-    padding: 13px 19px;
-    text-align: center;
-    text-transform: uppercase;
-    touch-action: manipulation;
-    transform: translateZ(0);
-    transition: filter .2s;
-    user-select: none;
-    -webkit-user-select: none;
-    vertical-align: middle;
-    white-space: nowrap;
-   }
-   
-   button:after {
-    background-clip: padding-box;
-    background-color: #1CB0F6;
-    border: solid transparent;
-    border-radius: 16px;
-    border-width: 0 0 4px;
-    bottom: -4px;
-    content: "";
-    left: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
-    z-index: -1;
-   }
-   
-   button:main, button:focus {
-    user-select: auto;
-   }
-   
-   button:hover:not(:disabled) {
-    filter: brightness(1.1);
-   }
-   
-   button:disabled {
-    cursor: auto;
-   }
-   
-   button:active:after {
-    border-width: 0 0 0px;
-   }
-   
-   button:active {
-    padding-bottom: 10px;
-   } */
+ 
 .shad{
+  width: 100% !important;
+  /* gap: 0px !important; */
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 .hq {
@@ -174,6 +113,7 @@
   align-items: center;     /* Center vertically */
   height: 100vh;  
 }
+
 /* .uploo{
   position: relative;
   width: 80%;
@@ -183,6 +123,7 @@
   filter: blur(8px);
   -webkit-filter: blur(8px);
 } */
+
 .foxx{
   position: fixed;
   top: 50%;
@@ -192,16 +133,31 @@
   padding: 20px;
   border-radius: 10px;
   text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1; /* Ensure the child is above the blurred parent */
+  cursor: pointer; /* Change cursor to pointer */
+  /* overflow: hidden; */
 }
 
 
+
+
+
+.bt{
+  position: absolute;
+    right: 0;
+}
+.lft{
+  position: absolute !important;
+  left: 10px !important;
+}
 .impd{
   /* display: flex; */
   /* flex-direction: row; */
   /* justify-content: space-around; */
   border: 1px;
   border-radius: 6px;
-  height: 150px;
+  height: 250px;
   width: 8000px;
   gap: 30px;
 }
@@ -211,6 +167,8 @@
   flex-direction: row;
   flex-wrap: wrap;
   gap: 25px;
+  margin-top: -65px;
+  padding: 30px 30px;
   
 }
 .nam2{
@@ -218,6 +176,11 @@
   box-sizing: border-box;
   padding: 10px;
  
+}
+.nc{
+  margin-left: 20%;
+  /* margin-top: px; */
+  /* font-size: 20px !important; */
 }
 .loader2 {
   display: flex;

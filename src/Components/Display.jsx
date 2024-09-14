@@ -31,7 +31,7 @@ const Display = () => {
   const [isDivVisible, setIsDivVisible] = useState(false);
   const [showFirstDiv, setShowFirstDiv] = useState(true);
   const [loading, setLoading] = useState(true);
-
+  const [isBlurred, setIsBlurred] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -68,6 +68,7 @@ const Display = () => {
   };
 
   const handleShowClick = () => {
+    setIsBlurred(!isBlurred);
     setIsDivVisible(true);
   };
 
@@ -240,7 +241,7 @@ const Display = () => {
                     {/* )} */}
                     <button
                       onClick={handelLogout}
-                      className="inline-flex items-center border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0"
+                      className="inline-flex items-center border-0 py-1 px-3 focus:outline-none hover:text-white hover:bg-red-600 rounded text-base mt-4 md:mt-0"
                     >
                     <span  className="sv">Log Out</span>  
                       <svg
@@ -322,8 +323,8 @@ const Display = () => {
             </div>
                  )}
             {isDivVisible && (
-              <div>
-                <div className="uploo">
+              
+                <div >
                   <div className="form foxx ">
                     <button
                       style={{ marginLeft: "90%" }}
@@ -379,7 +380,7 @@ const Display = () => {
                   </div>
                   <br />
                 </div>
-              </div>
+              
             )}
           </>
         ) : (

@@ -181,6 +181,7 @@ const Display = () => {
                   <div className="up">
                     <button onClick={handleShowClick}>
                       <svg
+                      
                         height="2.5em"
                         viewBox="0 0 1024.00 1024.00"
                         className="icon"
@@ -245,6 +246,7 @@ const Display = () => {
                     >
                     <span  className="sv">Log Out</span>  
                       <svg
+                      className="nml"
                         fill="#000000"
                         height="2.2em"
                         viewBox="0 0 24 24"

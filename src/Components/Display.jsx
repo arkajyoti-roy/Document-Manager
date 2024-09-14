@@ -31,6 +31,8 @@ import {
 import { v4 } from "uuid";
 import { toast } from "react-toastify";
 import ImgLoader from "./ImgLoader";
+import NoImg from "./NoImg";
+import NewAdd from "./NewAdd";
 
 const Display = () => {
   const [userDetails, setUserDetails] = useState(null);
@@ -41,7 +43,7 @@ const Display = () => {
   const [isDivVisible, setIsDivVisible] = useState(false);
   const [showFirstDiv, setShowFirstDiv] = useState(true);
   const [loading, setLoading] = useState(true);
-  const [isBlurred, setIsBlurred] = useState(false);
+  // const [isBlurred, setIsBlurred] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -78,8 +80,11 @@ const Display = () => {
   };
 
   const handleShowClick = () => {
-    setIsBlurred(!isBlurred);
+    // setIsBlurred(!isBlurred);
     setIsDivVisible(true);
+  };
+  const agn =()=>{
+    handleShowClick();
   };
 
   const handleHideClick = () => {
@@ -168,13 +173,14 @@ const Display = () => {
     backgroundColor: "black",
   };
 
+
   return (
     <>
       <div>
         {userDetails ? (
           <>
             <header className="text-gray-600 body-font">
-              <div className="container w-full shad gap-56 mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+              <div className=" shad gap-56 mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
                 <a className="flex title-font font-medium lft items-center text-gray-900 mb-4 md:mb-0">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -283,66 +289,67 @@ const Display = () => {
               </div>
             ) : (
               <div className="nam">
-                {/* {imgUrl.map((url) => (
-                <div className="nam2" key={url}>
-                  <img className="impd" src={url} alt="Uploaded" />
-                    <p className="npm">{item.name}</p>
-                   */}
-                {imgUrl.map((item, index) => (
-                  <div className="nam2" key={index}>
-                    <img
-                      className="impd"
-                      src={item.url}
-                      alt={`Uploaded ${index}`}
-                    />
-                    <p className="npm">{item.name}</p>
-                    <div className="flex gap-5 pt-4 justify-between">
-                      <button
-                        // onClick={() => downloadImage(url)}
-
-                        className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          fill="none"
-                          className="w-5 h-5 mr-2 -ml-1"
-                        >
-                          <path
-                            d="M12 4v12m8-8l-8 8-8-8"
-                            strokeWidth="2"
-                            strokeLinejoin="round"
-                            strokeLinecap="round"
-                          ></path>
-                        </svg>
-                        Download
-                      </button>
-                      {/* </a> */}
-
-                      <button
-                        onClick={() => handleDelete(item)}
-                        className="inline-flex items-center px-6 py-3 bg-red-600 transition ease-in-out delay-75 hover:bg-red-700 text-white text-base font-medium rounded-md shadow-sm hover:-translate-y-1 hover:scale-110"
-                      >
-                        <svg
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          className="w-5 h-5 mr-2"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                            strokeWidth="2"
-                            strokeLinejoin="round"
-                            strokeLinecap="round"
-                          ></path>
-                        </svg>
-                        Delete
-                      </button>
-                    </div>
+                {imgUrl.length === 0 ? (
+                  <div className="noimg">
+                    <NoImg />
+                    <button onClick={agn}>
+                      <NewAdd />
+                    </button>
                   </div>
-                ))}
+                ) : (
+                  imgUrl.map((item, index) => (
+                    <div className="nam2" key={index}>
+                      <img
+                        className="impd"
+                        src={item.url}
+                        alt={`Uploaded ${index}`}
+                      />
+                      <p className="npm">{item.name}</p>
+                      <div className="flex gap-5 pt-4 justify-between">
+                        <button
+                          // onClick={() => downloadImage(url)}
+                          className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            fill="none"
+                            className="w-5 h-5 mr-2 -ml-1"
+                          >
+                            <path
+                              d="M12 4v12m8-8l-8 8-8-8"
+                              strokeWidth="2"
+                              strokeLinejoin="round"
+                              strokeLinecap="round"
+                            ></path>
+                          </svg>
+                          Download
+                        </button>
+                        <button
+                          onClick={() => handleDelete(item)}
+                          className="inline-flex items-center px-6 py-3 bg-red-600 transition ease-in-out delay-75 hover:bg-red-700 text-white text-base font-medium rounded-md shadow-sm hover:-translate-y-1 hover:scale-110"
+                        >
+                          <svg
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            className="w-5 h-5 mr-2"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                              strokeWidth="2"
+                              strokeLinejoin="round"
+                              strokeLinecap="round"
+                            ></path>
+                          </svg>
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             )}
             {isDivVisible && (
@@ -371,6 +378,7 @@ const Display = () => {
                     />
                   </label>{" "}
                   <input
+                    className="inputtt"
                     type="text"
                     placeholder="Enter image name"
                     value={imageName}

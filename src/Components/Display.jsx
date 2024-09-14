@@ -92,6 +92,11 @@ const Display = () => {
   };
 
   const handleClick = async () => {
+    if (!imageName) {
+      alert("Image name is required!");
+      return;
+    }
+  
     handleHideClick();
     const imgRef = ref(imageDb, `iimps/${auth.currentUser.uid}/${v4()}`);
     await uploadBytes(imgRef, img);
@@ -106,7 +111,7 @@ const Display = () => {
       position: "top-right",
     });
   };
-
+  
   const fetchImages = async (uid) => {
     setLoading(true); // Set loading to true before fetching images
     const q = query(collection(db, "Images"), where("uid", "==", uid));

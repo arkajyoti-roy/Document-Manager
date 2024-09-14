@@ -382,6 +382,7 @@ const Display = () => {
                     type="text"
                     placeholder="Enter image name"
                     value={imageName}
+                    required
                     onChange={(e) => setImageName(e.target.value)}
                   />
                   <div className="flex items-center justify-center pt-5 ">

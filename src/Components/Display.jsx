@@ -2,7 +2,17 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import { auth, db } from "./firebase";
-import { getDoc, doc } from "firebase/firestore";
+// import { getDoc , doc, setDoc, addDoc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  where,
+  deleteDoc,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 import "./Dis.css";
 // import { storage } from './firebaseConfig';
 import { useNavigate } from "react-router-dom";
@@ -24,7 +34,7 @@ import ImgLoader from "./ImgLoader";
 
 const Display = () => {
   const [userDetails, setUserDetails] = useState(null);
-  const [img, setImg] = useState("");
+  const [img, setImg] = useState(null);
   const [imgUrl, setImgUrl] = useState([]);
   const [imageName, setImageName] = useState("");
   const navigate = useNavigate();
@@ -76,51 +86,57 @@ const Display = () => {
     setIsDivVisible(false);
   };
 
-  const handleClick = () => {
+  const handleClick = async () => {
     handleHideClick();
     const imgRef = ref(imageDb, `iimps/${auth.currentUser.uid}/${v4()}`);
-    uploadBytes(imgRef, img).then(() => {
-      fetchImages(auth.currentUser.uid); // Fetch images after upload
-      toast.success("Uploaded Successfully!", {
-        position: "top-right",
-      });
+    await uploadBytes(imgRef, img);
+    const url = await getDownloadURL(imgRef);
+    await addDoc(collection(db, "Images"), {
+      uid: auth.currentUser.uid,
+      imageName: imageName,
+      imageUrl: url,
+    });
+    fetchImages(auth.currentUser.uid); // Fetch images after upload
+    toast.success("Uploaded Successfully!", {
+      position: "top-right",
     });
   };
 
-  const fetchImages = (uid) => {
+  const fetchImages = async (uid) => {
     setLoading(true); // Set loading to true before fetching images
-    const listRef = ref(imageDb, `iimps/${uid}`);
-    listAll(listRef).then((imgs) => {
-      const urls = [];
-      imgs.items.forEach((val) => {
-        getDownloadURL(val).then((url) => {
-          urls.push(url);
-          if (urls.length === imgs.items.length) {
-            setImgUrl(urls);
-            setLoading(false); // Set loading to false after images are loaded
-          }
-        });
+    const q = query(collection(db, "Images"), where("uid", "==", uid));
+    const querySnapshot = await getDocs(q);
+    const urls = [];
+    querySnapshot.forEach((doc) => {
+      urls.push({
+        id: doc.id,
+        url: doc.data().imageUrl,
+        name: doc.data().imageName,
       });
     });
+    setImgUrl(urls);
+    setLoading(false); // Set loading to false after images are loaded
   };
 
-
-  const handleDelete = async (imageUrl) => {
-    if (!imageUrl) {
-      console.error("Invalid URL:", imageUrl);
+  const handleDelete = async (image) => {
+    if (!image.url) {
+      console.error("Invalid URL:", image.url);
       alert("Invalid URL. Please try again.");
       return;
     }
 
     try {
       // Find the reference of the image to delete
-      const imgRef = ref(imageDb, imageUrl);
+      const imgRef = ref(imageDb, image.url);
 
       // Delete the image from Firebase Storage
       await deleteObject(imgRef);
 
+      // Delete the corresponding document from Firestore
+      await deleteDoc(doc(db, "Images", image.id));
+
       // Update the state to remove the deleted image URL
-      setImgUrl(imgUrl.filter((url) => url !== imageUrl));
+      setImgUrl(imgUrl.filter((item) => item.id !== image.id));
       alert("File deleted successfully");
     } catch (error) {
       console.error("Error deleting file:", error);
@@ -181,7 +197,6 @@ const Display = () => {
                   <div className="up">
                     <button onClick={handleShowClick}>
                       <svg
-                      
                         height="2.5em"
                         viewBox="0 0 1024.00 1024.00"
                         className="icon"
@@ -238,15 +253,15 @@ const Display = () => {
                       </svg>
                     </button>
                   </div>
-                  <div className="lo"> 
+                  <div className="lo">
                     {/* )} */}
                     <button
                       onClick={handelLogout}
                       className="inline-flex items-center border-0 py-1 px-3 focus:outline-none hover:text-white hover:bg-red-600 rounded text-base mt-4 md:mt-0"
                     >
-                    <span  className="sv">Log Out</span>  
+                      <span className="sv">Log Out</span>
                       <svg
-                      className="nml"
+                        className="nml"
                         fill="#000000"
                         height="2.2em"
                         viewBox="0 0 24 24"
@@ -260,129 +275,133 @@ const Display = () => {
               </div>
             </header>
             <br />
-
             <br />
-            <br /> {loading ? (
-        <div className="loader2">
-          
-          <ImgLoader/>
-        </div> 
-      ) : (
-            <div className="nam">
-              {imgUrl.map((url) => (
+            <br />{" "}
+            {loading ? (
+              <div className="loader2">
+                <ImgLoader />
+              </div>
+            ) : (
+              <div className="nam">
+                {/* {imgUrl.map((url) => (
                 <div className="nam2" key={url}>
                   <img className="impd" src={url} alt="Uploaded" />
-
-                  <div className="flex gap-5 pt-4 justify-between">
-                    {/* <a href="iimps/{url}.png" download> */}
-
-                    <button
-                      // onClick={() => downloadImage(url)}
-
-                      className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        fill="none"
-                        className="w-5 h-5 mr-2 -ml-1"
-                      >
-                        <path
-                          d="M12 4v12m8-8l-8 8-8-8"
-                          strokeWidth="2"
-                          strokeLinejoin="round"
-                          strokeLinecap="round"
-                        ></path>
-                      </svg>
-                      Download
-                    </button>
-                    {/* </a> */}
-
-                    <button
-                      onClick={() => handleDelete(url)}
-                      className="inline-flex items-center px-6 py-3 bg-red-600 transition ease-in-out delay-75 hover:bg-red-700 text-white text-base font-medium rounded-md shadow-sm hover:-translate-y-1 hover:scale-110"
-                    >
-                      <svg
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        className="w-5 h-5 mr-2"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                          strokeWidth="2"
-                          strokeLinejoin="round"
-                          strokeLinecap="round"
-                        ></path>
-                      </svg>
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-                 )}
-            {isDivVisible && (
-              
-                <div >
-                  <div className="form foxx ">
-                    <button
-                      style={{ marginLeft: "90%" }}
-                      onClick={handleHideClick}
-                    >
-                      x
-                    </button>
-                    <br />
-                    <span className="form-title">Upload your file</span>
-                    <p className="form-paragraph">File should be an image</p>
-                    <label htmlFor="file-input" className="drop-container">
-                      <span className="drop-title">Drop files here</span>
-                      or
-                      <input
-                        type="file"
-                        onChange={(e) => {
-                          setImg(e.target.files[0]);
-                        }}
-                        accept="image/*"
-                        required
-                        id="file-input"
-                      />
-                    </label>{" "}
-                    <input
-                      type="text"
-                      placeholder="Enter image name"
-                      value={imageName}
-                      onChange={(e) => setImageName(e.target.value)}
+                    <p className="npm">{item.name}</p>
+                   */}
+                {imgUrl.map((item, index) => (
+                  <div className="nam2" key={index}>
+                    <img
+                      className="impd"
+                      src={item.url}
+                      alt={`Uploaded ${index}`}
                     />
-                    <div className="flex items-center justify-center pt-5 ">
+                    <p className="npm">{item.name}</p>
+                    <div className="flex gap-5 pt-4 justify-between">
                       <button
-                        onClick={handleClick}
-                        className="flex items-center bg-blue-500 text-white gap-1 px-4 py-2 cursor-pointer text-gray-800 font-semibold tracking-widest rounded-md hover:bg-blue-400 duration-300 hover:gap-2 hover:translate-x-3"
+                        // onClick={() => downloadImage(url)}
+
+                        className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out"
                       >
-                        Upload
                         <svg
-                          className="w-5 h-5"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          viewBox="0 0 24 24"
-                          fill="none"
                           xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          fill="none"
+                          className="w-5 h-5 mr-2 -ml-1"
                         >
                           <path
-                            d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"
+                            d="M12 4v12m8-8l-8 8-8-8"
+                            strokeWidth="2"
                             strokeLinejoin="round"
                             strokeLinecap="round"
                           ></path>
                         </svg>
+                        Download
+                      </button>
+                      {/* </a> */}
+
+                      <button
+                        onClick={() => handleDelete(item)}
+                        className="inline-flex items-center px-6 py-3 bg-red-600 transition ease-in-out delay-75 hover:bg-red-700 text-white text-base font-medium rounded-md shadow-sm hover:-translate-y-1 hover:scale-110"
+                      >
+                        <svg
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          className="w-5 h-5 mr-2"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                            strokeWidth="2"
+                            strokeLinejoin="round"
+                            strokeLinecap="round"
+                          ></path>
+                        </svg>
+                        Delete
                       </button>
                     </div>
-                    {/* <button onClick={handleClick}>Submit</button> <br /> */}
                   </div>
+                ))}
+              </div>
+            )}
+            {isDivVisible && (
+              <div>
+                <div className="form foxx ">
+                  <button
+                    style={{ marginLeft: "90%" }}
+                    onClick={handleHideClick}
+                  >
+                    x
+                  </button>
                   <br />
+                  <span className="form-title">Upload your file</span>
+                  <p className="form-paragraph">File should be an image</p>
+                  <label htmlFor="file-input" className="drop-container">
+                    <span className="drop-title">Drop files here</span>
+                    or
+                    <input
+                      type="file"
+                      onChange={(e) => {
+                        setImg(e.target.files[0]);
+                      }}
+                      accept="image/*"
+                      required
+                      id="file-input"
+                    />
+                  </label>{" "}
+                  <input
+                    type="text"
+                    placeholder="Enter image name"
+                    value={imageName}
+                    onChange={(e) => setImageName(e.target.value)}
+                  />
+                  <div className="flex items-center justify-center pt-5 ">
+                    <button
+                      onClick={handleClick}
+                      className="flex items-center bg-blue-500 text-white gap-1 px-4 py-2 cursor-pointer text-gray-800 font-semibold tracking-widest rounded-md hover:bg-blue-400 duration-300 hover:gap-2 hover:translate-x-3"
+                    >
+                      Upload
+                      <svg
+                        className="w-5 h-5"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"
+                          strokeLinejoin="round"
+                          strokeLinecap="round"
+                        ></path>
+                      </svg>
+                    </button>
+                  </div>
+                  {/* <button onClick={handleClick}>Submit</button> <br /> */}
                 </div>
-              
+                <br />
+              </div>
             )}
           </>
         ) : (

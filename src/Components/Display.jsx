@@ -38,7 +38,7 @@ const Display = () => {
   const [userDetails, setUserDetails] = useState(null);
   const [img, setImg] = useState(null);
   const [imgUrl, setImgUrl] = useState([]);
-  const [imageName, setImageName] = useState("");
+  let [imageName, setImageName] = useState("");
   const navigate = useNavigate();
   const [isDivVisible, setIsDivVisible] = useState(false);
   const [showFirstDiv, setShowFirstDiv] = useState(true);
@@ -92,8 +92,15 @@ const Display = () => {
   };
 
   const handleClick = async () => {
-    if (!imageName) {
-      alert("Image name is required!");
+    if (!imageName.trim() || !img) {
+      alert("Both image name and image file are required!");
+      return;
+    }
+  
+    // Check if the file format is acceptable
+    const allowedFormats = ["image/jpeg", "image/png", "image/gif", "image/webp", "image/svg+xml"];
+    if (!allowedFormats.includes(img.type)) {
+      alert("Invalid file format. Please upload an image in .jpg, .jpeg, .png, .gif, .webp, or .svg format.");
       return;
     }
   
@@ -103,14 +110,18 @@ const Display = () => {
     const url = await getDownloadURL(imgRef);
     await addDoc(collection(db, "Images"), {
       uid: auth.currentUser.uid,
-      imageName: imageName,
+      imageName: imageName.trim(),
       imageUrl: url,
     });
     fetchImages(auth.currentUser.uid); // Fetch images after upload
     toast.success("Uploaded Successfully!", {
       position: "top-right",
     });
+    setImageName((imageName = ""));
+
   };
+  
+  
   
   const fetchImages = async (uid) => {
     setLoading(true); // Set loading to true before fetching images
@@ -368,7 +379,7 @@ const Display = () => {
                   </button>
                   <br />
                   <span className="form-title">Upload your file</span>
-                  <p className="form-paragraph">File should be an image</p>
+                  <p className="form-paragraph">File should be in .jpg, .jpeg, .png, .gif, .webp, .svg format.</p>
                   <label htmlFor="file-input" className="drop-container">
                     <span className="drop-title">Drop files here</span>
                     or
@@ -377,7 +388,7 @@ const Display = () => {
                       onChange={(e) => {
                         setImg(e.target.files[0]);
                       }}
-                      accept="image/*"
+                      accept=".jpg, .jpeg, .png, .gif, .webp, .svg"
                       required
                       id="file-input"
                     />

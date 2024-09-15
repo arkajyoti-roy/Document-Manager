@@ -89,6 +89,8 @@ const Display = () => {
 
   const handleHideClick = () => {
     setIsDivVisible(false);
+    setImageName((imageName = ""));
+
   };
 
   const handleClick = async () => {

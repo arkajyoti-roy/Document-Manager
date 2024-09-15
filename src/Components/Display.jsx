@@ -38,12 +38,11 @@ const Display = () => {
   const [userDetails, setUserDetails] = useState(null);
   const [img, setImg] = useState(null);
   const [imgUrl, setImgUrl] = useState([]);
-  let [imageName, setImageName] = useState("");
+  const [imageName, setImageName] = useState("");
   const navigate = useNavigate();
   const [isDivVisible, setIsDivVisible] = useState(false);
   const [showFirstDiv, setShowFirstDiv] = useState(true);
   const [loading, setLoading] = useState(true);
-  // const [isBlurred, setIsBlurred] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -80,7 +79,6 @@ const Display = () => {
   };
 
   const handleShowClick = () => {
-    // setIsBlurred(!isBlurred);
     setIsDivVisible(true);
   };
   const agn =()=>{
@@ -89,7 +87,7 @@ const Display = () => {
 
   const handleHideClick = () => {
     setIsDivVisible(false);
-    setImageName((imageName = ""));
+    setImageName("");
 
   };
 
@@ -99,7 +97,6 @@ const Display = () => {
       return;
     }
   
-    // Check if the file format is acceptable
     const allowedFormats = ["image/jpeg", "image/png", "image/gif", "image/webp", "image/svg+xml"];
     if (!allowedFormats.includes(img.type)) {
       alert("Invalid file format. Please upload an image in .jpg, .jpeg, .png, .gif, .webp, or .svg format.");
@@ -119,11 +116,9 @@ const Display = () => {
     toast.success("Uploaded Successfully!", {
       position: "top-right",
     });
-    setImageName((imageName = ""));
+    setImageName("");
 
   };
-  
-  
   
   const fetchImages = async (uid) => {
     setLoading(true); // Set loading to true before fetching images
@@ -138,7 +133,7 @@ const Display = () => {
       });
     });
     setImgUrl(urls);
-    setLoading(false); // Set loading to false after images are loaded
+    setLoading(false);
   };
 
   const handleDelete = async (image) => {
@@ -149,16 +144,12 @@ const Display = () => {
     }
 
     try {
-      // Find the reference of the image to delete
       const imgRef = ref(imageDb, image.url);
 
-      // Delete the image from Firebase Storage
       await deleteObject(imgRef);
 
-      // Delete the corresponding document from Firestore
       await deleteDoc(doc(db, "Images", image.id));
 
-      // Update the state to remove the deleted image URL
       setImgUrl(imgUrl.filter((item) => item.id !== image.id));
       alert("File deleted successfully");
     } catch (error) {

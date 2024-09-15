@@ -48,7 +48,6 @@ const Display = () => {
     const timer = setTimeout(() => {
       setShowFirstDiv(false);
     }, 2900);
-
     return () => clearTimeout(timer);
   }, []);
 
@@ -70,7 +69,7 @@ const Display = () => {
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           setUserDetails(docSnap.data());
-          fetchImages(user.uid); // Fetch images after user data is set
+          fetchImages(user.uid);
         } else {
           console.log("User is logged out");
         }
@@ -112,16 +111,17 @@ const Display = () => {
       imageName: imageName.trim(),
       imageUrl: url,
     });
-    fetchImages(auth.currentUser.uid); // Fetch images after upload
+    fetchImages(auth.currentUser.uid);
     toast.success("Uploaded Successfully!", {
       position: "top-right",
     });
     setImageName("");
-
+    setImg(null); // Reset the img state here
   };
   
+  
   const fetchImages = async (uid) => {
-    setLoading(true); // Set loading to true before fetching images
+    setLoading(true);
     const q = query(collection(db, "Images"), where("uid", "==", uid));
     const querySnapshot = await getDocs(q);
     const urls = [];

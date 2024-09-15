@@ -116,7 +116,7 @@ const Display = () => {
       position: "top-right",
     });
     setImageName("");
-    setImg(null); // Reset the img state here
+    setImg(null); 
   };
   
   

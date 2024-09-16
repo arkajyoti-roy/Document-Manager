@@ -14,12 +14,9 @@ import {
   getDoc,
 } from "firebase/firestore";
 import "./Dis.css";
-// import { storage } from './firebaseConfig';
 import { useNavigate } from "react-router-dom";
 import Loader from "./Loader";
 import { imageDb } from "./firebase";
-import { saveAs } from "file-saver";
-import html2canvas from "html2canvas";
 
 import {
   getDownloadURL,
@@ -96,9 +93,17 @@ const Display = () => {
       return;
     }
 
-    const allowedFormats = ["image/jpeg", "image/png", "image/gif", "image/webp", "image/svg+xml"];
+    const allowedFormats = [
+      "image/jpeg",
+      "image/png",
+      "image/gif",
+      "image/webp",
+      "image/svg+xml",
+    ];
     if (!allowedFormats.includes(img.type)) {
-      alert("Invalid file format. Please upload an image in .jpg, .jpeg, .png, .gif, .webp, or .svg format.");
+      alert(
+        "Invalid file format. Please upload an image in .jpg, .jpeg, .png, .gif, .webp, or .svg format."
+      );
       return;
     }
 
@@ -161,7 +166,7 @@ const Display = () => {
     const response = await fetch(url);
     const blob = await response.blob();
     const downloadUrl = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = downloadUrl;
     a.download = name;
     document.body.appendChild(a);
@@ -192,7 +197,6 @@ const Display = () => {
     height: "100vh",
     backgroundColor: "black",
   };
-
 
   return (
     <>
@@ -383,7 +387,10 @@ const Display = () => {
                   </button>
                   <br />
                   <span className="form-title">Upload your file</span>
-                  <p className="form-paragraph">File should be in .jpg, .jpeg, .png, .gif, .webp, .svg format.</p>
+                  <p className="form-paragraph">
+                    File should be in .jpg, .jpeg, .png, .gif, .webp, .svg
+                    format.
+                  </p>
                   <label htmlFor="file-input" className="drop-container">
                     <span className="drop-title">Drop files here</span>
                     or

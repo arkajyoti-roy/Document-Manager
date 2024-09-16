@@ -163,15 +163,23 @@ const Display = () => {
   };
 
   const handleDownload = async (url, name) => {
-    const response = await fetch(url);
-    const blob = await response.blob();
-    const downloadUrl = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = downloadUrl;
-    a.download = name;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
+    toast.success("Downloading!", {
+      position: "top-right",
+    });
+    try {
+      const response = await fetch(`https://cors-anywhere.herokuapp.com/${url}`);
+      const blob = await response.blob();
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = downloadUrl;
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (error) {
+      console.error("Error downloading file:", error);
+      alert("Error downloading file: " + error.message);
+    }
   };
 
   const handelLogout = async () => {

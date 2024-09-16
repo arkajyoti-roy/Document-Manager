@@ -80,14 +80,14 @@ const Display = () => {
   const handleShowClick = () => {
     setIsDivVisible(true);
   };
-  const agn =()=>{
+
+  const agn = () => {
     handleShowClick();
   };
 
   const handleHideClick = () => {
     setIsDivVisible(false);
     setImageName("");
-
   };
 
   const handleClick = async () => {
@@ -95,13 +95,13 @@ const Display = () => {
       alert("Both image name and image file are required!");
       return;
     }
-  
+
     const allowedFormats = ["image/jpeg", "image/png", "image/gif", "image/webp", "image/svg+xml"];
     if (!allowedFormats.includes(img.type)) {
       alert("Invalid file format. Please upload an image in .jpg, .jpeg, .png, .gif, .webp, or .svg format.");
       return;
     }
-  
+
     handleHideClick();
     const imgRef = ref(imageDb, `iimps/${auth.currentUser.uid}/${v4()}`);
     await uploadBytes(imgRef, img);
@@ -116,10 +116,9 @@ const Display = () => {
       position: "top-right",
     });
     setImageName("");
-    setImg(null); 
+    setImg(null);
   };
-  
-  
+
   const fetchImages = async (uid) => {
     setLoading(true);
     const q = query(collection(db, "Images"), where("uid", "==", uid));
@@ -156,6 +155,18 @@ const Display = () => {
       console.error("Error deleting file:", error);
       alert("Error deleting file: " + error.message);
     }
+  };
+
+  const handleDownload = async (url, name) => {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    const downloadUrl = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = downloadUrl;
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
   };
 
   const handelLogout = async () => {
@@ -316,7 +327,7 @@ const Display = () => {
                       <p className="npm">{item.name}</p>
                       <div className="flex gap-5 pt-4 justify-between">
                         <button
-                          // onClick={() => downloadImage(url)}
+                          onClick={() => handleDownload(item.url)}
                           className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out"
                         >
                           <svg

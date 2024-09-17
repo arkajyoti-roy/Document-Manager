@@ -31,6 +31,7 @@ import ImgLoader from "./ImgLoader";
 import NoImg from "./NoImg";
 import NewAdd from "./NewAdd";
 
+
 const Display = () => {
   const [userDetails, setUserDetails] = useState(null);
   const [img, setImg] = useState(null);
@@ -166,11 +167,14 @@ const Display = () => {
     toast.success("Downloading!", {
       position: "top-right",
     });
+    alert("Download Started!");
     try {
-      const response = await fetch(`https://cors-anywhere.herokuapp.com/${url}`);
+      const response = await fetch(
+        `https://cors-anywhere.herokuapp.com/${url}`
+      );
       const blob = await response.blob();
       const downloadUrl = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = downloadUrl;
       a.download = name;
       document.body.appendChild(a);
@@ -194,10 +198,6 @@ const Display = () => {
     }
   };
 
-  // const downloadImage = () => {
-
-  //     };
-  // };
   const containerStyle = {
     display: "flex",
     justifyContent: "center",
@@ -292,7 +292,6 @@ const Display = () => {
                     </button>
                   </div>
                   <div className="lo">
-                    {/* )} */}
                     <button
                       onClick={handelLogout}
                       className="inline-flex items-center border-0 py-1 px-3 focus:outline-none hover:text-white hover:bg-red-600 rounded text-base mt-4 md:mt-0"
@@ -314,7 +313,7 @@ const Display = () => {
             </header>
             <br />
             <br />
-            <br />{" "}
+            <br />
             {loading ? (
               <div className="loader2">
                 <ImgLoader />
@@ -385,66 +384,71 @@ const Display = () => {
               </div>
             )}
             {isDivVisible && (
-              <div>
-                <div className="form foxx ">
-                  <button
-                    style={{ marginLeft: "90%" }}
-                    onClick={handleHideClick}
-                  >
-                    x
-                  </button>
-                  <br />
-                  <span className="form-title">Upload your file</span>
-                  <p className="form-paragraph">
-                    File should be in .jpg, .jpeg, .png, .gif, .webp, .svg
-                    format.
-                  </p>
-                  <label htmlFor="file-input" className="drop-container">
-                    <span className="drop-title">Drop files here</span>
-                    or
-                    <input
-                      type="file"
-                      onChange={(e) => {
-                        setImg(e.target.files[0]);
-                      }}
-                      accept=".jpg, .jpeg, .png, .gif, .webp, .svg"
-                      required
-                      id="file-input"
-                    />
-                  </label>{" "}
-                  <input
-                    className="inputtt"
-                    type="text"
-                    placeholder="Enter image name"
-                    value={imageName}
-                    required
-                    onChange={(e) => setImageName(e.target.value)}
-                  />
-                  <div className="flex items-center justify-center pt-5 ">
-                    <button
-                      onClick={handleClick}
-                      className="flex items-center bg-blue-500 text-white gap-1 px-4 py-2 cursor-pointer text-gray-800 font-semibold tracking-widest rounded-md hover:bg-blue-400 duration-300 hover:gap-2 hover:translate-x-3"
-                    >
-                      Upload
+              <div className="popup-overlay">
+                <div className="popup">
+                  <div className="form foxx">
+                    <button onClick={handleHideClick} className="btn close">
                       <svg
-                        className="w-5 h-5"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        viewBox="0 0 24 24"
-                        fill="none"
                         xmlns="http://www.w3.org/2000/svg"
+                        height="1em"
+                        viewBox="0 0 384 512"
                       >
-                        <path
-                          d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"
-                          strokeLinejoin="round"
-                          strokeLinecap="round"
-                        ></path>
+                        <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"></path>
                       </svg>
                     </button>
+
+                    <br />
+                    <span className="form-title">Upload your file</span>
+                    <p className="form-paragraph">
+                      File should be in .jpg, .jpeg, .png, .gif, .webp, .svg
+                      format.
+                    </p>
+                    <label htmlFor="file-input" className="drop-container">
+                      <span className="drop-title">Drop files here</span>
+                      or
+                      <input
+                        type="file"
+                        onChange={(e) => {
+                          setImg(e.target.files[0]);
+                        }}
+                        accept=".jpg, .jpeg, .png, .gif, .webp, .svg"
+                        required
+                        id="file-input"
+                      />
+                    </label>
+                    <input
+                      className="inputtt"
+                      type="text"
+                      placeholder="Enter image name"
+                      value={imageName}
+                      required
+                      onChange={(e) => setImageName(e.target.value)}
+                    />
+                    <div className="flex items-center justify-center pt-5">
+                      <button
+                        onClick={handleClick}
+                        className="flex items-center bg-blue-500 text-white gap-1 px-4 py-2 cursor-pointer text-gray-800 font-semibold tracking-widest rounded-md hover:bg-blue-400 duration-300 hover:gap-2 hover:translate-x-3"
+                      >
+                        Upload
+                        <svg
+                          className="w-5 h-5"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"
+                            strokeLinejoin="round"
+                            strokeLinecap="round"
+                          ></path>
+                        </svg>
+                      </button>
+                    </div>
                   </div>
-                  {/* <button onClick={handleClick}>Submit</button> <br /> */}
+                  <br />
                 </div>
-                <br />
               </div>
             )}
           </>

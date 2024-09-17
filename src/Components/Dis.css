@@ -80,7 +80,15 @@
 #file-input::file-selector-button:hover {
   background: #0d45a5;
 }
-
+.foxx2 {
+  z-index: 200;
+  filter: blur(8px); /* Adjust the blur intensity as needed */
+  -webkit-filter: blur(8px); /* For Safari */
+  height: 100vh; /* Full height */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
 .shad {
   width: 100% !important;
   background-color: #fff !important;
@@ -124,7 +132,7 @@
   margin-top: 5px;
   font-size: 20px;
   /* font-weight:600; */
-  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
 }
 
 /* .uploo{
@@ -197,14 +205,13 @@
   align-items: center;
   height: 80vh;
 }
-.noimg{
+.noimg {
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
   height: 70vh !important;
   margin-x: auto;
   width: 500vw !important;
-
 }
 
 .nam2:nth-child(n + n) {
@@ -271,7 +278,7 @@
     display: none;
   }
 }
-/* From Uiverse.io by ErzenXz */ 
+
 .inputtt {
   margin-top: 15px;
   width: 100%;
@@ -296,4 +303,58 @@
 
 .inputtt:focus {
   border: 2px solid grey;
+}
+
+.app {
+  text-align: center;
+  padding: 50px;
+}
+
+.content {
+  padding: 20px;
+}
+
+.blur {
+  filter: blur(150px);
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  z-index: 1001;
+}
+
+.btn {
+  float: right;
+  margin-top: -7px;
+  margin-right: -7px;
+  fill: #FDFFFC;
+  border: none;
+  width: 2rem;
+  aspect-ratio: 1/1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  border-radius: 50%;
+}
+
+.close {
+  background-color: orangered;
 }

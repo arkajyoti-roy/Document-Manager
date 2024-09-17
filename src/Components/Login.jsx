@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "./firebase";
 import "./Dis.css";
+// import Google from "./Google";
 
 const Login = () => {
   const [email, setEmail] = useState();
@@ -104,6 +105,7 @@ const Login = () => {
               </Link>
             </p>
           </form>
+          {/* <Google/> */}
         </div>
       </div>
     </>

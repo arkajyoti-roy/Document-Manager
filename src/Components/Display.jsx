@@ -37,25 +37,21 @@ const Display = () => {
   const [isDivVisible, setIsDivVisible] = useState(false);
   const [showFirstDiv, setShowFirstDiv] = useState(true);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowFirstDiv(false);
     }, 2900);
     return () => clearTimeout(timer);
   }, []);
-
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       setUserDetails(JSON.parse(storedUser));
     }
   }, []);
-
   useEffect(() => {
     fetchData();
   }, []);
-
   const fetchData = async () => {
     auth.onAuthStateChanged(async (user) => {
       if (user) {
@@ -70,20 +66,16 @@ const Display = () => {
       }
     });
   };
-
   const handleShowClick = () => {
     setIsDivVisible(true);
   };
-
   const agn = () => {
     handleShowClick();
   };
-
   const handleHideClick = () => {
     setIsDivVisible(false);
     setImageName("");
   };
-
   const handleClick = async () => {
     handleHideClick();
     toast.success("Uploading!", {
@@ -94,7 +86,6 @@ const Display = () => {
       alert("Both image name and image file are required!");
       return;
     }
-
     const allowedFormats = [
       "image/jpeg",
       "image/png",
@@ -108,7 +99,6 @@ const Display = () => {
       );
       return;
     }
-
     const imgRef = ref(imageDb, `iimps/${auth.currentUser.uid}/${v4()}`);
     await uploadBytes(imgRef, img);
     const url = await getDownloadURL(imgRef);
@@ -124,7 +114,6 @@ const Display = () => {
     setImageName("");
     setImg(null);
   };
-
   const fetchImages = async (uid) => {
     setLoading(true);
     const q = query(collection(db, "Images"), where("uid", "==", uid));
@@ -140,14 +129,12 @@ const Display = () => {
     setImgUrl(urls);
     setLoading(false);
   };
-
   const handleDelete = async (image) => {
     if (!image.url) {
       console.error("Invalid URL:", image.url);
       alert("Invalid URL. Please try again.");
       return;
     }
-
     try {
       const imgRef = ref(imageDb, image.url);
 
@@ -164,15 +151,17 @@ const Display = () => {
   };
 
   const handleDownload = async (url, name) => {
-    toast.success("Downloading!", {
-      position: "top-right",
-    });
+    // toast.success("Downloading!", {
+    //   position: "top-right",
+    // });
     alert("Download Started!");
     try {
-      const response = await fetch(
-        `https://cors-anywhere.herokuapp.com/${url}`
-      );
-      const blob = await response.blob();
+      const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
+      if (!response.ok) {
+        throw new Error(`Network response was not ok: ${response.statusText}`);
+      }
+      const data = await response.json();
+      const blob = await (await fetch(data.contents)).blob();
       const downloadUrl = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = downloadUrl;
@@ -185,7 +174,9 @@ const Display = () => {
       alert("Error downloading file: " + error.message);
     }
   };
+  
 
+  
   const handelLogout = async () => {
     try {
       await auth.signOut();
@@ -197,7 +188,6 @@ const Display = () => {
       console.error(error.message);
     }
   };
-
   const containerStyle = {
     display: "flex",
     justifyContent: "center",

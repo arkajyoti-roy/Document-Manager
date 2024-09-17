@@ -85,6 +85,11 @@ const Display = () => {
   };
 
   const handleClick = async () => {
+    handleHideClick();
+    toast.success("Uploading!", {
+      position: "top-right",
+    });
+    alert("Uploading! Please wait...");
     if (!imageName.trim() || !img) {
       alert("Both image name and image file are required!");
       return;
@@ -104,7 +109,6 @@ const Display = () => {
       return;
     }
 
-    handleHideClick();
     const imgRef = ref(imageDb, `iimps/${auth.currentUser.uid}/${v4()}`);
     await uploadBytes(imgRef, img);
     const url = await getDownloadURL(imgRef);

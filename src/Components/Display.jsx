@@ -1,8 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import { auth, db } from "./firebase";
-// import { getDoc , doc, setDoc, addDoc } from "firebase/firestore";
 import {
   collection,
   addDoc,
@@ -30,7 +27,6 @@ import { toast } from "react-toastify";
 import ImgLoader from "./ImgLoader";
 import NoImg from "./NoImg";
 import NewAdd from "./NewAdd";
-
 
 const Display = () => {
   const [userDetails, setUserDetails] = useState(null);

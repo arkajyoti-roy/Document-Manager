@@ -192,6 +192,13 @@
   flex-basis: 100%;
 }
 @media (min-width: 300px) and (max-width: 768px) {
+  .impd {
+    border: 1px;
+    border-radius: 6px;
+    height: 390px;
+    width: 8000px;
+    gap: 30px;
+}
   .shad {
     margin-top: 12px;
     display: flex !important;
@@ -214,7 +221,7 @@
     display: none;
   }
   .nc {
-    margin-left: -32%;
+    margin-left: -26%;
     font-size: 20px !important;
   }
   .bt {
@@ -239,7 +246,7 @@
     margin-top: -13px;
   }
   .nam {
-    margin-top: 30px;
+    margin-top: 0px;
   }
   .sv {
     display: none;

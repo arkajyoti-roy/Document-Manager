@@ -81,7 +81,6 @@ const Display = () => {
     toast.success("Uploading!", {
       position: "top-right",
     });
-    alert("Uploading! Please wait...");
     if (!imageName.trim() || !img) {
       alert("Both image name and image file are required!");
       return;

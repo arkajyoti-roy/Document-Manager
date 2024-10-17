@@ -159,7 +159,7 @@ const Display = () => {
     name = imageName;
     
     try {
-      const response = await fetch(`http://localhost:8080/download?url=${encodeURIComponent(url)}&name=${encodeURIComponent(name)}`);
+      const response = await fetch(`https://doc-man.vercel.app/download?url=${encodeURIComponent(url)}&name=${encodeURIComponent(name)}`);
       if (!response.ok) {
         throw new Error(`Network response was not ok: ${response.statusText}`);
       }

@@ -110,6 +110,7 @@ const Display = () => {
     toast.success("Uploaded Successfully!", {
       position: "top-right",
     });
+    // let nam = setImageName;
     setImageName("");
     setImg(null);
   };
@@ -142,7 +143,6 @@ const Display = () => {
       await deleteDoc(doc(db, "Images", image.id));
 
       setImgUrl(imgUrl.filter((item) => item.id !== image.id));
-      // alert("File deleted successfully");
       toast.success("File deleted successfully", {
         position: "top-right",
       });
@@ -152,22 +152,20 @@ const Display = () => {
     }
   };
 
-
   const handleDownload = async (url, name) => {
     toast.success("Download is Starting", {
       position: "top-right",
     });
-  
+    name = imageName;
+    
     try {
-      const response = await fetch(`https://doc-man.vercel.app/download?url=${encodeURIComponent(url)}`);
-      
+      const response = await fetch(`http://localhost:8080/download?url=${encodeURIComponent(url)}&name=${encodeURIComponent(name)}`);
       if (!response.ok) {
         throw new Error(`Network response was not ok: ${response.statusText}`);
       }
-      
+  
       const blob = await response.blob();
       const downloadUrl = window.URL.createObjectURL(blob);
-      
       const a = document.createElement("a");
       a.href = downloadUrl;
       a.download = name;
@@ -185,6 +183,45 @@ const Display = () => {
       });
     }
   };
+  
+
+
+  // const handleDownload = async (url, name) => {
+  //   toast.success("Download is Starting", {
+  //     position: "top-right",
+  //   });
+  
+  //   try {
+  //     const response = await fetch(`https://doc-man.vercel.app/download?url=${encodeURIComponent(url)}`);
+      
+  //     if (!response.ok) {
+  //       throw new Error(`Network response was not ok: ${response.statusText}`);
+  //     }
+      
+  //     const blob = await response.blob();
+  //     const downloadUrl = window.URL.createObjectURL(blob);
+      
+  //     const a = document.createElement("a");
+  //     a.href = downloadUrl;
+  //     a.download = name;
+  //     document.body.appendChild(a);
+  //     a.click();
+  //     a.remove();
+  
+  //     toast.success("Download Complete!", {
+  //       position: "top-right",
+  //     });
+  //   } catch (error) {
+  //     console.error("Error downloading file:", error);
+  //     toast.error("Error downloading file: " + error.message, {
+  //       position: "top-right",
+  //     });
+  //   }
+  // };
+
+
+  
+  
   
   
 

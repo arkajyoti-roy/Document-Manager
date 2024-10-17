@@ -150,30 +150,67 @@ const Display = () => {
     }
   };
 
+  // const handleDownload = async (url, name) => {
+  //   // toast.success("Downloading!", {
+  //   //   position: "top-right",
+  //   // });
+  //   alert("Download Started!");
+  //   try {
+  //     const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
+  //     if (!response.ok) {
+  //       throw new Error(`Network response was not ok: ${response.statusText}`);
+  //     }
+  //     const data = await response.json();
+  //     const blob = await (await fetch(data.contents)).blob();
+  //     const downloadUrl = window.URL.createObjectURL(blob);
+  //     const a = document.createElement("a");
+  //     a.href = downloadUrl;
+  //     a.download = name;
+  //     document.body.appendChild(a);
+  //     a.click();
+  //     a.remove();
+  //   } catch (error) {
+  //     console.error("Error downloading file:", error);
+  //     alert("Error downloading file: " + error.message);
+  //   }
+  // };
+  
   const handleDownload = async (url, name) => {
-    // toast.success("Downloading!", {
-    //   position: "top-right",
-    // });
-    alert("Download Started!");
+    // Inform user download is starting
+    toast.success("Download is Starting", {
+      position: "top-right",
+    });
+  
     try {
-      const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
+      // Fetch the file from the backend
+      const response = await fetch(`http://localhost:3000/download?url=${encodeURIComponent(url)}`);
+      
       if (!response.ok) {
         throw new Error(`Network response was not ok: ${response.statusText}`);
       }
-      const data = await response.json();
-      const blob = await (await fetch(data.contents)).blob();
+      
+      const blob = await response.blob();
       const downloadUrl = window.URL.createObjectURL(blob);
+      
       const a = document.createElement("a");
       a.href = downloadUrl;
       a.download = name;
       document.body.appendChild(a);
       a.click();
       a.remove();
+  
+      // Inform user that download is complete
+      toast.success("Download Complete!", {
+        position: "top-right",
+      });
     } catch (error) {
       console.error("Error downloading file:", error);
-      alert("Error downloading file: " + error.message);
+      toast.error("Error downloading file: " + error.message, {
+        position: "top-right",
+      });
     }
   };
+  
   
 
   

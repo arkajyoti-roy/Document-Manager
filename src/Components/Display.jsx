@@ -143,46 +143,23 @@ const Display = () => {
       await deleteDoc(doc(db, "Images", image.id));
 
       setImgUrl(imgUrl.filter((item) => item.id !== image.id));
-      alert("File deleted successfully");
+      // alert("File deleted successfully");
+      toast.success("File deleted successfully", {
+        position: "top-right",
+      });
     } catch (error) {
       console.error("Error deleting file:", error);
       alert("Error deleting file: " + error.message);
     }
   };
 
-  // const handleDownload = async (url, name) => {
-  //   // toast.success("Downloading!", {
-  //   //   position: "top-right",
-  //   // });
-  //   alert("Download Started!");
-  //   try {
-  //     const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
-  //     if (!response.ok) {
-  //       throw new Error(`Network response was not ok: ${response.statusText}`);
-  //     }
-  //     const data = await response.json();
-  //     const blob = await (await fetch(data.contents)).blob();
-  //     const downloadUrl = window.URL.createObjectURL(blob);
-  //     const a = document.createElement("a");
-  //     a.href = downloadUrl;
-  //     a.download = name;
-  //     document.body.appendChild(a);
-  //     a.click();
-  //     a.remove();
-  //   } catch (error) {
-  //     console.error("Error downloading file:", error);
-  //     alert("Error downloading file: " + error.message);
-  //   }
-  // };
-  
+
   const handleDownload = async (url, name) => {
-    // Inform user download is starting
     toast.success("Download is Starting", {
       position: "top-right",
     });
   
     try {
-      // Fetch the file from the backend
       const response = await fetch(`https://doc-man.vercel.app/download?url=${encodeURIComponent(url)}`);
       
       if (!response.ok) {
@@ -199,7 +176,6 @@ const Display = () => {
       a.click();
       a.remove();
   
-      // Inform user that download is complete
       toast.success("Download Complete!", {
         position: "top-right",
       });
@@ -220,7 +196,9 @@ const Display = () => {
       toast.success("Logout Successfully!", {
         position: "top-right",
       });
-      navigate("/login");
+      setTimeout(() => {
+        navigate("/login");
+      }, 1000);
     } catch (error) {
       console.error(error.message);
     }

@@ -26,7 +26,10 @@ const Registration = () => {
       toast.success("Registered Successfully!", {
         position: "top-right",
       });
-      navigate("/login");
+      setTimeout(()=>{
+
+        navigate("/login");
+      },500)
       if (user) {
         await setDoc(doc(db, "Users", user.uid), {
           email: user.email,

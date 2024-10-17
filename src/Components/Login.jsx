@@ -30,7 +30,9 @@ const Login = () => {
       toast.success("Login Successful!", {
         position: "top-right",
       });
-      navigate("/display");
+      setTimeout(() => {
+        navigate('/display');
+      }, 1000);
     } catch (error) {
       console.log(error.message);
       toast.error(error.message, {

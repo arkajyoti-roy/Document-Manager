@@ -183,7 +183,7 @@ const Display = () => {
   
     try {
       // Fetch the file from the backend
-      const response = await fetch(`http://localhost:3000/download?url=${encodeURIComponent(url)}`);
+      const response = await fetch(`https://doc-man.vercel.app/download?url=${encodeURIComponent(url)}`);
       
       if (!response.ok) {
         throw new Error(`Network response was not ok: ${response.statusText}`);

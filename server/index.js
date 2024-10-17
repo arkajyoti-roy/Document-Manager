@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
 const app = express();
-
+require('dotenv').config();
 app.use(cors());
 
 app.get('/download', async (req, res) => {

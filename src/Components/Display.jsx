@@ -225,7 +225,7 @@ const Display = () => {
   
   setTimeout(()=>{
     handelLogout()
-  }, 240000)
+  }, 280000)
   
 
   

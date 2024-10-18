@@ -51,8 +51,11 @@ const Display = () => {
   }, []);
   useEffect(() => {
     fetchData();
-  },40000);
-  // }, []);
+  // },40000);
+  }, []);
+  useEffect(()=>{
+    fetchImages()
+  },30000 )
   const fetchData = async () => {
     auth.onAuthStateChanged(async (user) => {
       if (user) {

@@ -51,7 +51,8 @@ const Display = () => {
   }, []);
   useEffect(() => {
     fetchData();
-  }, []);
+  },40000);
+  // }, []);
   const fetchData = async () => {
     auth.onAuthStateChanged(async (user) => {
       if (user) {
